@@ -14,6 +14,9 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 
 async function checker(date, from, to) {
+  if (from >= to) {
+    return false;
+  }
   const appointments = await Appointment.findAll({
     where: {
       date: date,
@@ -28,12 +31,25 @@ async function checker(date, from, to) {
   return true;
 }
 
-app.get("/", (req, res) => {
-  res.render("index");
+app.get("/", async (req, res) => {
+  const appointments = await Appointment.findAll({
+    order: [["date", "ASC"]],
+  });
+  res.render("appointment", { appointments, message: "" });
 });
 
-app.get("/appointment", (req, res) => {
-  res.render("appointment");
+app.get("/addNew", (req, res) => {
+  res.render("new");
+});
+
+app.get("/edit/:id", async (req, res) => {
+  const id = req.params.id;
+  const appointment = await Appointment.findOne({
+    where: {
+      id: id,
+    },
+  });
+  res.render("edit", { appointment });
 });
 
 app.post("/appointment", async (req, res) => {
@@ -41,7 +57,7 @@ app.post("/appointment", async (req, res) => {
   const from = req.body.from;
   const to = req.body.to;
   const check = await checker(date, from, to);
-  if (!check) {
+  if (check) {
     try {
       await Appointment.create({
         title: req.body.title,
@@ -50,14 +66,50 @@ app.post("/appointment", async (req, res) => {
         from: req.body.from,
         to: req.body.to,
       });
-      res.render("appointment", {
-        message: "Appointment created successfully",
-      });
+      res.redirect("/");
     } catch (err) {
       console.log(err);
     }
   } else {
-    res.render("appointment", { message: "Appointment already exists" });
+    res.render("new", { message: "Timming is Invalid" });
+  }
+});
+
+app.post("/update/:id", async (req, res) => {
+  const id = req.params.id;
+  const title = req.body.title;
+  const description = req.body.description;
+  try {
+    await Appointment.update(
+      {
+        title: title,
+        description: description,
+      },
+      {
+        where: {
+          id: id,
+        },
+      }
+    );
+    res.redirect("/");
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
+  }
+});
+
+app.delete("/delete/:id", async (req, res) => {
+  const id = req.params.id;
+  try {
+    await Appointment.destroy({
+      where: {
+        id: id,
+      },
+    });
+    res.sendStatus(200);
+  } catch (err) {
+    console.log(err);
+    res.sendStatus(500);
   }
 });
 
