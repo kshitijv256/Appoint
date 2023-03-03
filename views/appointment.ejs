@@ -7,9 +7,12 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <title>Appointment</title>
 </head>
-<body>
-    <div class="w-full flex flex-col">
-        Your Appointments
+<body class="h-full bg-gray-900">
+    <div class="w-full flex flex-col items-center text-lg text-white">
+        <h1 class="text-2xl">Your Appointments</h1>
+        <div class="text-green-400 mt-10">
+            <%= message %>
+        </div>
     </div>
 </body>
 </html>
