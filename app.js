@@ -26,7 +26,6 @@ async function checker(date, from, to) {
       (appointments[i].from < from && appointments[i].to > from) ||
       (appointments[i].from < to && appointments[i].to > to)
     ) {
-      console.log("Appointment time overlapping");
       return false;
     }
   }
@@ -35,7 +34,10 @@ async function checker(date, from, to) {
 
 app.get("/", async (req, res) => {
   const appointments = await Appointment.findAll({
-    order: [["date", "ASC"]],
+    order: [
+      ["date", "ASC"],
+      ["from", "ASC"],
+    ],
   });
   res.render("appointment", { appointments, message: "" });
 });
@@ -87,31 +89,52 @@ app.post("/appointment", async (req, res) => {
       where: {
         date: date,
       },
-      order: [["date", "ASC"]],
+      order: [
+        ["date", "ASC"],
+        ["from", "ASC"],
+      ],
     });
+    freeSlot = {
+      from: "",
+      to: "",
+    };
+    var conflictingSlots = [];
     for (let i = 0; i < appointments.length; i++) {
-      if (from > appointments[i].from && from < appointments[i].to) {
-        var till = appointments[i].to;
-        var li = till.split(":");
-        if (li[0] !== "23") {
-          li[0] = parseInt(li[0]) + 1;
-          li[0] = li[0] < 10 ? "0" + li[0] : li[0];
+      if (
+        (from > appointments[i].from && from < appointments[i].to) ||
+        (to > appointments[i].from && to < appointments[i].to)
+      ) {
+        if (
+          i < appointments.length - 1 &&
+          appointments[i].to == appointments[i + 1].from
+        ) {
+          conflictingSlots.push(appointments[i]);
+          continue;
         } else {
-          li[0] = "00";
-          li[1] = "00";
-          li[2] = "00";
+          conflictingSlots.push(appointments[i]);
+          var till = appointments[i].to;
+          var li = till.split(":");
+          if (li[0] !== "23") {
+            li[0] = parseInt(li[0]) + 1;
+            li[0] = li[0] < 10 ? "0" + li[0] : li[0];
+          } else {
+            li[0] = "00";
+            li[1] = "00";
+            li[2] = "00";
+          }
+          till = li.join(":");
+          var temp =
+            i < appointments.length - 1 ? appointments[i + 1].from : till;
+          freeSlot = {
+            from: appointments[i].to,
+            to: temp,
+          };
+          break;
         }
-        till = li.join(":");
-        var temp =
-          i < appointments.length - 1 ? appointments[i + 1].from : till;
-        freeSlot = {
-          from: appointments[i].to,
-          to: temp,
-        };
       }
     }
     console.log(till);
-    res.redirect("/");
+    res.render("alternate", { freeSlot, conflictingSlots });
   }
 });
 

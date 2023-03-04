@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>Alternate Slot</title>
+</head>
+<body>
+    <center>
+        <div class="text-2xl">
+            The slot you selected is not available. Please select another slot.
+            <% if (freeSlot.from == "") { %>
+                <p>There are no free slots available for this day.</p>
+            <% } else { %>
+                <%= freeSlot.from %>
+                <%= freeSlot.to %>
+            <% } %>
+        </div>
+        <br>
+        <section class="text-white w-2/5">
+            <% conflictingSlots.forEach((appointment) => { %>
+            <div class="bg-gray-700 p-4 my-4 w-full rounded-md border border-green-400">
+              <div class="flex flex-row justify-between items-baseline w-full">
+                <div class="text-2xl font-bold"><%= appointment.title %></div>
+                <div class="flex flex-row">
+                    <a href="#"
+                    onclick="deleteAppointment('<%= appointment.id %>')"
+                    >
+                        <img src="/assets/trash.png" alt="edit" class="w-6 h-6 mr-2 cursor-pointer" />
+                    </a>
+                </div>
+              </div>
+              <div class="flex flex-row justify-between items-baseline">
+                  <div class="flex flex-col text-gray-200 py-1">
+                      <div class="text-sm">From: <%= appointment.from %></div>
+                      <div class="text-sm">To: <%= appointment.to %></div>
+                  </div>
+                <div class="text-sm"><%= appointment.date %></div>
+              </div>
+              <div class="font-semibold text-justify"><%= appointment.description %></div>
+            </div>
+            <% }); %>
+          </section>
+        <div class="text-2xl">
+            <a href="/">Go Back</a>
+    </center>
+</body>
+</html>
