@@ -1,14 +1,14 @@
 <div class="p-4 bg-gray-800 rounded-sm w-2/6 min-h-min pb-12">
-  <div class="flex flex-row justify-between bg-green-400 p-2 text-white text-2xl w-full font-bold">
+  <div class="flex flex-row justify-between p-2 text-yellow-300 text-2xl w-full font-bold">
     <p>Set Appointment</p>
     <div class="p-1" id="close-btn">
-      close
+      <img src="/assets/close.png" alt="edit" class="w-6 h-6 mr-4 cursor-pointer hover:scale-110" />
   </div>
   </div>
   <form
     action="/appointment"
     method="post"
-    class="text-white my-4 relative"
+    class="text-yellow-100 my-4 relative"
   >
     <div class="flex flex-col py-2">
       <label for="title">Title</label>
@@ -58,6 +58,6 @@
         />
       </div>
     </div>
-    <button type="submit" class="rounded-md bg-green-500 hover:bg-green-400 px-3 py-2 text-xl my-2 absolute right-0">Submit</button>
+    <button type="submit" class="rounded-md bg-green-500 hover:bg-green-400 px-3 py-2 text-xl my-2 absolute right-0 text-yellow-100">Submit</button>
   </form>
 </div>

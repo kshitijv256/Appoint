@@ -39,7 +39,7 @@ app.get("/", async (req, res) => {
       ["from", "ASC"],
     ],
   });
-  res.render("appointment", { appointments, message: "" });
+  res.render("appointment", { appointments });
 });
 
 app.get("/addNew", (req, res) => {

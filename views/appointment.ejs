@@ -21,38 +21,35 @@
   </head>
   <body class="h-full bg-gray-800">
     <%- include('add.ejs') %>
-      <!-- <a href="/addNew"> -->
-          <div class="rounded-[50%] bg-green-400 p-4 fixed top-[85vh] right-[3%]" id="open-btn">
+          <div class="rounded-[50%] bg-green-500 p-4 fixed top-[85vh] right-[3%] hover:bg-green-400" id="open-btn">
                 <img src="/assets/plus.png" alt="plus" class="w-6 h-6" />
           </div>
-      <!-- </a> -->
     <div class="w-full flex flex-col items-center text-lg text-white">
-      <h1 class="text-3xl font-bold p-4">Your Appointments</h1>
-      <div class="text-green-400 mt-10"><%= message %></div>
+      <h1 class="text-3xl font-bold p-4 text-yellow-400">Your Appointments</h1>
       <section class="text-white w-2/5">
         <% appointments.forEach((appointment) => { %>
         <div class="bg-gray-700 p-4 my-4 w-full rounded-md border border-green-400">
           <div class="flex flex-row justify-between items-baseline w-full">
-            <div class="text-2xl font-bold"><%= appointment.title %></div>
+            <div class="text-2xl font-bold capitalize text-yellow-300"><%= appointment.title %></div>
             <div class="flex flex-row">
                 <a href="/edit/<%= appointment.id %>">
-                    <img src="/assets/edit.png" alt="edit" class="w-6 h-6 mr-2 cursor-pointer" />
+                    <img src="/assets/edit.png" alt="edit" class="w-6 h-6 mr-4 cursor-pointer hover:scale-110" />
                 </a>
                 <a href="#"
                 onclick="deleteAppointment('<%= appointment.id %>')"
                 >
-                    <img src="/assets/trash.png" alt="edit" class="w-6 h-6 mr-2 cursor-pointer" />
+                    <img src="/assets/trash.png" alt="edit" class="w-6 h-6 mr-2 cursor-pointer hover:scale-110" />
                 </a>
             </div>
           </div>
-          <div class="flex flex-row justify-between items-baseline">
-              <div class="flex flex-col text-gray-200 py-1">
-                  <div class="text-sm">From: <%= appointment.from %></div>
-                  <div class="text-sm">To: <%= appointment.to %></div>
+          <div class="flex flex-row justify-between items-center text-green-300">
+              <div class="flex flex-col py-1">
+                  <div class="text-base">From: <%= appointment.from %></div>
+                  <div class="text-base">To: <%= appointment.to %></div>
               </div>
-            <div class="text-sm"><%= appointment.date %></div>
+            <div class="text-base"><%= appointment.date %></div>
           </div>
-          <div class="font-semibold text-justify"><%= appointment.description %></div>
+          <div class="text-justify text-lg"><%= appointment.description %></div>
         </div>
         <% }); %>
       </section>
