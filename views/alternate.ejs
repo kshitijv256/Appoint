@@ -1,50 +1,80 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      function deleteAppointment(id) {
+        fetch(`/delete/${id}`, {
+          method: "DELETE",
+        }).then((res) => {
+          if (res.status === 200) {
+            window.location.href = "/";
+          }
+        });
+      }
+    </script>
     <title>Alternate Slot</title>
-</head>
-<body>
-    <center>
+  </head>
+  <body
+    class="h-full w-full bg-gray-800 text-white flex flex-row justify-center"
+  >
+    <div class="w-2/5 flex flex-col">
+      <div
+        class="text-2xl p-4 bg-yellow-400 rounded-b-md text-center font-semibold"
+      >
+        The slot you selected is not available.
+      </div>
+      <div class="text-2xl flex flex-col items-start mt-10">
+        <% if (freeSlot.from == "") { %>
+        <p>There are no free slots available for this day.</p>
+        <% } else { %>
+        <p class="text-yellow-300">Next available slot:</p>
+        <p class="text-green-100">
+          From: <%= freeSlot.from %> To: <%= freeSlot.to %>
+        </p>
+        <% } %>
+      </div>
+      <section class="text-white mt-10">
         <div class="text-2xl">
-            The slot you selected is not available. Please select another slot.
-            <% if (freeSlot.from == "") { %>
-                <p>There are no free slots available for this day.</p>
-            <% } else { %>
-                <%= freeSlot.from %>
-                <%= freeSlot.to %>
-            <% } %>
+          <p class="text-red-300">Delete a conflicting slots</p>
         </div>
-        <br>
-        <section class="text-white w-2/5">
-            <% conflictingSlots.forEach((appointment) => { %>
-            <div class="bg-gray-700 p-4 my-4 w-full rounded-md border border-green-400">
-              <div class="flex flex-row justify-between items-baseline w-full">
-                <div class="text-2xl font-bold"><%= appointment.title %></div>
-                <div class="flex flex-row">
-                    <a href="#"
-                    onclick="deleteAppointment('<%= appointment.id %>')"
-                    >
-                        <img src="/assets/trash.png" alt="edit" class="w-6 h-6 mr-2 cursor-pointer" />
-                    </a>
-                </div>
-              </div>
-              <div class="flex flex-row justify-between items-baseline">
-                  <div class="flex flex-col text-gray-200 py-1">
-                      <div class="text-sm">From: <%= appointment.from %></div>
-                      <div class="text-sm">To: <%= appointment.to %></div>
-                  </div>
-                <div class="text-sm"><%= appointment.date %></div>
-              </div>
-              <div class="font-semibold text-justify"><%= appointment.description %></div>
+        <% conflictingSlots.forEach((appointment) => { %>
+        <div
+          class="bg-gray-700 p-4 my-4 w-full rounded-md hover:border border-red-400"
+        >
+          <div class="flex flex-row justify-between items-baseline w-full">
+            <div class="text-2xl font-bold capitalize text-yellow-300">
+              <%= appointment.title %>
             </div>
-            <% }); %>
-          </section>
-        <div class="text-2xl">
-            <a href="/">Go Back</a>
-    </center>
-</body>
+            <div class="flex flex-row">
+              <a href="#" onclick="deleteAppointment('<%= appointment.id %>')">
+                <img
+                  src="/assets/trash.png"
+                  alt="delete"
+                  class="w-6 h-6 mr-2 cursor-pointer hover:scale-110"
+                />
+              </a>
+            </div>
+          </div>
+          <div
+            class="flex flex-row justify-between items-center text-green-300"
+          >
+            <div class="flex flex-col py-1">
+              <div class="text-base">From: <%= appointment.from %></div>
+              <div class="text-base">To: <%= appointment.to %></div>
+            </div>
+            <div class="text-base"><%= appointment.date %></div>
+          </div>
+          <div class="text-justify text-lg"><%= appointment.description %></div>
+        </div>
+        <% }); %>
+      </section>
+      <a href="/">
+        <div class="text-xl bg-yellow-500 hover:bg-yellow-400 rounded px-3 py-2 w-fit">Go Back</div>
+      </a>
+    </div>
+  </body>
 </html>

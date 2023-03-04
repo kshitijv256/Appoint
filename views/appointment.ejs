@@ -26,9 +26,9 @@
           </div>
     <div class="w-full flex flex-col items-center text-lg text-white">
       <h1 class="text-3xl font-bold p-4 text-yellow-400">Your Appointments</h1>
-      <section class="text-white w-2/5">
+      <section class="text-white w-2/5 min-w-fit">
         <% appointments.forEach((appointment) => { %>
-        <div class="bg-gray-700 p-4 my-4 w-full rounded-md border border-green-400">
+        <div class="bg-gray-700 p-4 my-4 w-full rounded-md hover:border border-green-400">
           <div class="flex flex-row justify-between items-baseline w-full">
             <div class="text-2xl font-bold capitalize text-yellow-300"><%= appointment.title %></div>
             <div class="flex flex-row">
